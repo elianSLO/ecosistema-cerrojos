@@ -1,0 +1,21 @@
+// Este archivo sirve para configurar el IntelliSense (Autocompletado, sintaxis, etc)
+{
+    "configurations": [
+        {
+            "name": "AVR",
+            "compilerPath": "/usr/bin/avr-gcc",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/app/include",
+                "${workspaceFolder}/common/include",
+                "${workspaceFolder}/hal/include"
+            ],
+            "compilerArgs": [
+                "-mmcu=atmega328p",
+                "-DF_CPU=16000000UL"
+            ],
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
