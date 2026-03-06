@@ -1,15 +1,68 @@
 #include "params.h"
+#include "pinout.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+
 void PIN_SETUP(void)
 {
+	DDRD &= ~(1 << P_TX);			
+	PORTD |= (1 << P_TX);
+	DDRD &= ~(1 << P_RX);
+	PORTD |= (1 << P_RX);
+	DDRD |= (1 << P_MOTOR);
+	PORTD &= ~(1 << P_MOTOR);
+	DDRD &= ~(1 << P_IRQ);
+	PORTD |= (1 << P_IRQ);
+	DDRD |= (1 << P_RELE);
+	PORTD &= ~(1 << P_RELE);
+	DDRD &= ~(1 << P_SINT);
+	PORTD |= (1 << P_SINT);
+	DDRD &= ~(1 << P_SEXT);
+	PORTD |= (1 << P_SEXT);
+	DDRD |= (1 << P_ACTIVAR);
+	PORTD &= ~(1 << P_ACTIVAR);
+
+	DDRB |= (1 << P_LIBRE1);
+	PORTB &= ~(1 << P_LIBRE1);
+	DDRB |= (1 << P_LIBRE2);
+	PORTB &= ~(1 << P_LIBRE2);
+	DDRB |= (1 << P_PERIF);
+	PORTB &= ~(1 << P_PERIF);
+	DDRB |= (1 << P_MOSI);
+	PORTB &= ~(1 << P_MOSI);
+	DDRB |= (1 << P_MISO);
+	PORTB &= ~(1 << P_MISO);
+	DDRB |= (1 << P_SCK);
+	PORTB &= ~(1 << P_SCK);
+	//PB6 Y PB7 CRYSTAL, NO SE CONFIGURAN.
+
+	DDRC &= ~(1 << PC0);
+	PORTC |= (1 << PC0);
+
+	DDRC &= ~(1 << P_TECLA);
+	PORTC &= ~(1 << P_TECLA);
 	
+	DDRC |= (1 << P_BUZZER);
+	PORTC &= ~(1 << P_BUZZER);
+
+	DDRC &= ~(1 << P_BATERIA);
+	PORTC &= ~(1 << P_BATERIA);
+
+	DDRC &= ~(1 << P_SDA);
+	PORTC |= (1 << P_SDA);
+	DDRC &= ~(1 << P_SCL);
+	PORTC |= (1 << P_SCL);
+
+	EICRA |= (1 << ISC11);			// ISC11 = 1, ISC10 = 0: Interrupción en el borde de bajada
+	EICRA &= ~(1 << ISC10);
+	EIFR |= (1 << INTF1);			// Limpiar bandera de interrupción INT1 si estuviera activa
+	EIMSK |= (1 << INT1);			// Habilita INT1
+	_delay_ms(10);
 }
 
 void BEEP(uint8_t reps)
 {
-	#ifdef BEEP_ENABLED
 	uint8_t x = 10;
 	for(uint8_t j = 0; j < reps; j++)
 	{
@@ -23,20 +76,6 @@ void BEEP(uint8_t reps)
 		if(reps>1)
 			_delay_ms(200);
 	}
-
-	//if(currState == STATE_CONFIG)
-		//LEDON();
-		
-	#else
-	for(uint8_t j = 0; j < reps; j++)
-	{
-		PORTC |= (1 << P_BUZZER);
-		_delay_ms(1);
-		PORTC &= ~(1 << P_BUZZER);
-		if(reps>1)
-		_delay_ms(200);
-	}
-	#endif
 }
 
 void LED(uint8_t reps)
